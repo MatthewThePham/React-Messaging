@@ -1,8 +1,37 @@
-import React from 'react';
+import React, {Component} from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-function App() {
+import MessagePage from './Components/MessagePage'
+
+class App extends Component {
+  state = {
+    response: '',
+  };
+
+  componentDidMount(){
+    //test to see if server connects
+    this.callApi()
+      .then(res => this.setState({ response: res.express }))
+      .catch(err => console.log(err));
+  }
+
+  componentDidUpdate(){
+    //test to see if server connects
+    this.callApi()
+      .then(res => this.setState({ response: res.express }))
+      .catch(err => console.log(err));
+  }
+
+  callApi = async () => {
+    const response = await fetch(`/get`);
+    const body = await response.json();
+
+    //if (response.status !== 200) throw Error(response.message);
+      return body;
+  };
+
+  render(){
   return (
     <div className="App">
       <header className="App-header">
@@ -18,9 +47,14 @@ function App() {
         >
           Learn React
         </a>
+
+        <div>{this.state.response} users</div>
       </header>
+
+      <MessagePage></MessagePage>
     </div>
   );
+  }
 }
 
 export default App;

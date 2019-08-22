@@ -29,11 +29,12 @@ io.on('connection', function (socket) {
     var addedUser = false;
    // socket.emit('news', "Hello world");
 
-
-    socket.on('myOtherEvent', function (data) {
+    socket.on('sendMessage', function (data) {
       console.log(data);
+
       socket.broadcast.emit('news', data);
     });
+
 
     socket.on('registerUser', function (data) {
         if (addedUser) return;
@@ -42,6 +43,7 @@ io.on('connection', function (socket) {
         connectCounter++;
         socket.username = data;
         let tempData = socket.username + " Has Joined"
+
         socket.broadcast.emit('news', tempData);
         addedUser=true;
     });
