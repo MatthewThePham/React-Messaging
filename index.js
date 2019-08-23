@@ -19,6 +19,7 @@ app.get('/get', (req, res, next) => {
     var tempMessage = 'Number of users : ' + connectCounter;
     
     res.send({ express: tempMessage });
+
     console.log('Connected to react')
     next();
 
@@ -32,7 +33,7 @@ io.on('connection', function (socket) {
     socket.on('sendMessage', function (data) {
       console.log(data);
 
-      socket.broadcast.emit('news', data);
+      socket.broadcast.emit('news',  socket.username + " : " + data);
     });
 
 
@@ -53,6 +54,7 @@ io.on('connection', function (socket) {
       
       if (addedUser){
         connectCounter--; 
+        
         socket.broadcast.emit('news', socket.username + " Has Disconnected");
       }
     });

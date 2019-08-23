@@ -16,43 +16,57 @@ function ChildComponent (props)
 }
 
 class MessagePage extends Component {
+   
     state = {
         value: '',       //used for mess
         submission: false,
         children: []
-    };
+    }
 
-  createChildComp = (data) =>{
-    this.setState({
-        childern: this.state.children.concat(
-            <ChildComponent message={this.state.value}></ChildComponent>
-        )
-    });
-  }
+    componentDidMount(){
 
-  componentDidMount(){
-    //test to see if server connects
-    socket.on('news', function (data) {
-        console.log(data);
-    });
-      
+        //big meme have to bind into arrow function
+        socket.on('news', data => {
+            if(data ){
+                this.updateArray(data);
+            } 
+        });
+
+    }
+
+    updateArray = (data) => {
+        this.setState({
+            children: [...this.state.children, 
+                <ChildComponent message={data}></ChildComponent>
+            ] 
+        });
     }
 
     //this is for the username
     handleSubmit = (e) => {
         e.preventDefault();
         this.setState({ submission : true});
+
         console.log(this.state.value);
 
+        //sends this to server
         socket.emit('registerUser', this.state.value)
-        this.setState({ valye : ''});
-
     }
 
     //this is for messages
     handleSubmitMessage = (e) => {
         e.preventDefault();
-        this.createChildComp(this.state.value)
+
+        console.log(this.state.value);
+    
+        this.setState({
+            children: [...this.state.children, 
+                <ChildComponent message={"You: " + this.state.value}></ChildComponent>
+            ] 
+        });
+
+        //sends this to server
+        socket.emit('sendMessage', this.state.value)
     }
 
     //this is for textbox for both pages
@@ -61,7 +75,6 @@ class MessagePage extends Component {
     };
 
     render(){
-
         return(
         <div>
             {
@@ -69,62 +82,64 @@ class MessagePage extends Component {
             ?
             <form noValidate onSubmit={this.handleSubmit}>
 
-                <Grid container spacing={2}>
+            <Grid container spacing={2}>
                 <Grid item xs={12} >
-                <TextField
-                variant="outlined"
-                multiline
-                rows="4"
-                required fullWidth
-                name="multiline"
-                label="User name"
-                id="Multiline"
-                onChange={this.handleChange}
-                />
-            </Grid>
+                    <TextField
+                    variant="outlined"
+                    multiline
+                    rows="4"
+                    required fullWidth
+                    name="multiline"
+                    label="User name"
+                    id="Multiline"
+                    onChange={this.handleChange}
+                    />
+                </Grid>
             </Grid>
 
             <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            >
-            Submit
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                >
+                Submit
             </Button>
             </form>
             :
             <form noValidate onSubmit={this.handleSubmitMessage}>
 
-                <Grid container spacing={2}>
+            <Grid container spacing={2}>
                 <Grid item xs={12} >
-                <TextField
-                variant="outlined"
-                multiline
-                rows="4"
-                required fullWidth
-                name="multiline"
-                label="Message"
-                id="Multiline"
-                onChange={this.handleChange}
-                />
-            </Grid>
+                    <TextField
+                    variant="outlined"
+                    multiline
+                    rows="4"
+                    required fullWidth
+                    name="multiline"
+                    label="Message"
+                    id="Multiline"
+                    onChange={this.handleChange}
+                    />
+                </Grid>
             </Grid>
 
             <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            >
-            Send Message
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                >
+                Send Message
             </Button>
-            </form>
-            }
 
             <div>
                 {this.state.children}
             </div>
+
+            </form>
+            }
+
         </div>
         )
     }
