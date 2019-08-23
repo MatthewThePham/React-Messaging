@@ -6,26 +6,30 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Container from '@material-ui/core/Container';
 
+import Grow from '@material-ui/core/Grow';
+
 import openSocket from 'socket.io-client';
 const socket = openSocket('http://localhost:5000');
 
+//added keys for list, react needs key to keep track of array items relative to dom
+//https://stackoverflow.com/questions/39549424/how-to-create-unique-keys-for-react-elements/51428373
 
-function ChildComponent (props)
-{
-    return <div>{props.message}</div>;
-}
+
 
 class MessagePage extends Component {
    
     state = {
         value: '',       //used for mess
         submission: false,
-        children: []
+        children: [],
+        childIndex:0,
     }
 
     componentDidMount(){
 
-        //big meme have to bind into arrow function
+        //big meme have to bind into arrow function for inner function to work
+        // ie using keyword "this" on a function
+
         socket.on('news', data => {
             if(data ){
                 this.updateArray(data);
@@ -36,10 +40,9 @@ class MessagePage extends Component {
 
     updateArray = (data) => {
         this.setState({
-            children: [...this.state.children, 
-                <ChildComponent message={data}></ChildComponent>
-            ] 
+            children: [...this.state.children, data] 
         });
+
     }
 
     //this is for the username
@@ -51,6 +54,9 @@ class MessagePage extends Component {
 
         //sends this to server
         socket.emit('registerUser', this.state.value)
+
+        //clears message
+        this.setState({ value : ""});
     }
 
     //this is for messages
@@ -59,19 +65,20 @@ class MessagePage extends Component {
 
         console.log(this.state.value);
     
-        this.setState({
-            children: [...this.state.children, 
-                <ChildComponent message={"You: " + this.state.value}></ChildComponent>
-            ] 
-        });
+        var tempMessage = "You: " + this.state.value;
+        this.updateArray(tempMessage)
 
         //sends this to server
         socket.emit('sendMessage', this.state.value)
+
+        //clears message
+        this.setState({ value : ""});
     }
 
     //this is for textbox for both pages
     handleChange = event => {
         this.setState({ value : event.target.value});
+
     };
 
     render(){
@@ -82,12 +89,11 @@ class MessagePage extends Component {
             ?
             <form noValidate onSubmit={this.handleSubmit}>
 
-            <Grid container spacing={2}>
-                <Grid item xs={12} >
+            <Grid container style={{paddingTop:"5%"}} justify="center" spacing={2}>
+                <Grid item xs={6} >
                     <TextField
                     variant="outlined"
                     multiline
-                    rows="4"
                     required fullWidth
                     name="multiline"
                     label="User name"
@@ -97,46 +103,66 @@ class MessagePage extends Component {
                 </Grid>
             </Grid>
 
-            <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                color="primary"
-                >
-                Submit
-            </Button>
+            <Grid container style={{paddingBottom:"5%"}} justify="center" spacing={2}>
+                <Grid item xs={6} >
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        >
+                        Submit
+                    </Button>
+                </Grid>
+            </Grid>
+
             </form>
             :
             <form noValidate onSubmit={this.handleSubmitMessage}>
 
-            <Grid container spacing={2}>
-                <Grid item xs={12} >
-                    <TextField
-                    variant="outlined"
-                    multiline
-                    rows="4"
-                    required fullWidth
-                    name="multiline"
-                    label="Message"
-                    id="Multiline"
-                    onChange={this.handleChange}
-                    />
-                </Grid>
+            <React.Fragment>
+                {this.state.children.map( (home,index) => 
+                    <li key={index} style={{paddingTop:"1%"}} >
+                        {home}
+                    </li>
+                )}
+            </React.Fragment>
+
+            <Grid container style={{paddingTop:"5%"}} justify="center" spacing={2}>
+                <Grow in={true} timeout={1000} >
+                    <Grid item xs={10} >
+                        <TextField
+                        variant="outlined"
+                        multiline
+                        rows="4"
+                        required fullWidth
+                        name="multiline"
+                        label="Message"
+                        id="Multiline"
+                        value={this.state.value}
+                        onChange={this.handleChange}
+                        />
+                    </Grid>
+                </Grow>
+
             </Grid>
 
-            <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                color="primary"
-                >
-                Send Message
-            </Button>
+            <Grid container style={{paddingBottom:"5%"}} justify="center" spacing={2}>
+                <Grow in={true} timeout={700} >
+                    <Grid item xs={10} >
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            color="primary"
+                            >
+                            Send Message
+                        </Button>
+                    </Grid>
+                </Grow>
+            </Grid>
 
-            <div>
-                {this.state.children}
-            </div>
-
+            
             </form>
             }
 
