@@ -32,6 +32,8 @@ class MessagePage extends Component {
         submission: false,
         children: [],
         childIndex:0,
+
+        doneTransition:false
     }
 
     componentDidMount(){
@@ -40,23 +42,23 @@ class MessagePage extends Component {
 
         socket.on('news', data => {
             if(data ){
-                this.updateArray(data);
+                this.updateArray(data);    
             } 
         });
-
-        //moves to the bottom of the form
-        if(this.el.current != null){
-            this.el.current.scrollIntoView({behavior:"smooth", block:"center"});
-        }
     }
 
+    
     componentDidUpdate(){
         //moves to the bottom of the form after pressing submit
         //doesnt auto do in componentDidmount as no new dom elemnent was mounted
-        if(this.el.current != null){
-            this.el.current.scrollIntoView({behavior:"smooth", block:"center"});
+        if(this.el.current != null && this.state.submission === true && this.state.doneTransition == false){
+            this.el.current.scrollIntoView({ block:"center"});
+            this.setState({
+                doneTransition: true
+            });
         }
     }
+    
 
     updateArray = (data) => {
         this.setState({
@@ -64,11 +66,11 @@ class MessagePage extends Component {
         });
 
 
-            var out = this.newData.current;
-            if(out != null){
-                out.scrollTop = out.scrollHeight - out.clientHeight
-                out.scrollIntoView({ behavior: "smooth" })
-            }
+        var out = this.newData.current;
+        if(out != null){
+            out.scrollTop = out.scrollHeight - out.clientHeight
+            out.scrollIntoView({ behavior: "smooth",block:"nearest",inline: 'start' })
+        }
 
         
     }
@@ -86,6 +88,7 @@ class MessagePage extends Component {
 
         //clears message
         this.setState({ value : ""});
+        
     }
 
     //this is for messages
@@ -102,6 +105,11 @@ class MessagePage extends Component {
 
         //clears message
         this.setState({ value : ""});
+
+        //moves to the bottom of the form
+        if(this.el.current != null){
+            this.el.current.scrollIntoView({ block:"nearest", inline: 'start'});
+        }
     }
 
     //this is for textbox for both pages
@@ -152,7 +160,7 @@ class MessagePage extends Component {
 
             <Grid container style={{paddingTop:"2%"}} justify="center" spacing={2}>
                 <Grow in={true} timeout={1000} >
-
+                    
                     <Paper elevation={3} ref={this.newData}  justify="center"  style={{ justify:"center", height: '20px', width:"50%", overflow: 'auto', paddingTop:"15%", paddingBottom:"3%"}}>
                         <List>
                             <React.Fragment>
