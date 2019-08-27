@@ -7,6 +7,9 @@ import TextField from '@material-ui/core/TextField';
 import Container from '@material-ui/core/Container';
 
 import Grow from '@material-ui/core/Grow';
+import Paper from '@material-ui/core/Paper';
+import List from '@material-ui/core/List';
+import ListItemText from '@material-ui/core/ListItemText';
 
 import openSocket from 'socket.io-client';
 const socket = openSocket('http://localhost:5000');
@@ -17,7 +20,13 @@ const socket = openSocket('http://localhost:5000');
 
 
 class MessagePage extends Component {
-   
+    constructor(props) {
+        super(props);
+        this.el = React.createRef();
+        this.newData = React.createRef();
+
+    }
+
     state = {
         value: '',       //used for mess
         submission: false,
@@ -26,7 +35,6 @@ class MessagePage extends Component {
     }
 
     componentDidMount(){
-
         //big meme have to bind into arrow function for inner function to work
         // ie using keyword "this" on a function
 
@@ -36,6 +44,18 @@ class MessagePage extends Component {
             } 
         });
 
+        //moves to the bottom of the form
+        if(this.el.current != null){
+            this.el.current.scrollIntoView({behavior:"smooth", block:"center"});
+        }
+    }
+
+    componentDidUpdate(){
+        //moves to the bottom of the form after pressing submit
+        //doesnt auto do in componentDidmount as no new dom elemnent was mounted
+        if(this.el.current != null){
+            this.el.current.scrollIntoView({behavior:"smooth", block:"center"});
+        }
     }
 
     updateArray = (data) => {
@@ -43,7 +63,16 @@ class MessagePage extends Component {
             children: [...this.state.children, data] 
         });
 
+
+            var out = this.newData.current;
+            if(out != null){
+                out.scrollTop = out.scrollHeight - out.clientHeight
+                out.scrollIntoView({ behavior: "smooth" })
+            }
+
+        
     }
+    
 
     //this is for the username
     handleSubmit = (e) => {
@@ -76,9 +105,9 @@ class MessagePage extends Component {
     }
 
     //this is for textbox for both pages
+    
     handleChange = event => {
         this.setState({ value : event.target.value});
-
     };
 
     render(){
@@ -120,21 +149,34 @@ class MessagePage extends Component {
             :
             <form noValidate onSubmit={this.handleSubmitMessage}>
 
-            <React.Fragment>
-                {this.state.children.map( (home,index) => 
-                    <li key={index} style={{paddingTop:"1%"}} >
-                        {home}
-                    </li>
-                )}
-            </React.Fragment>
 
-            <Grid container style={{paddingTop:"5%"}} justify="center" spacing={2}>
+            <Grid container style={{paddingTop:"2%"}} justify="center" spacing={2}>
                 <Grow in={true} timeout={1000} >
-                    <Grid item xs={10} >
+
+                    <Paper elevation={3} ref={this.newData}  justify="center"  style={{ justify:"center", height: '20px', width:"50%", overflow: 'auto', paddingTop:"15%", paddingBottom:"3%"}}>
+                        <List>
+                            <React.Fragment>
+                                {this.state.children.map( (home,index) => 
+                                
+                                <Typography variant="subtitle1" key={index} style={{paddingTop:"1%"}}>
+                                    {home}
+                                </Typography>
+
+                                )}
+                                
+                            </React.Fragment>
+                        </List>
+                    </Paper>
+                </Grow>
+            </Grid>
+
+            <Grid container style={{paddingTop:"2%"}} justify="center" spacing={2}>
+                <Grow in={true} timeout={1000} >
+                    <Grid item xs={6} >
                         <TextField
                         variant="outlined"
                         multiline
-                        rows="4"
+                        rows="2"
                         required fullWidth
                         name="multiline"
                         label="Message"
@@ -144,12 +186,11 @@ class MessagePage extends Component {
                         />
                     </Grid>
                 </Grow>
-
             </Grid>
 
-            <Grid container style={{paddingBottom:"5%"}} justify="center" spacing={2}>
+            <Grid container style={{paddingBottom:"10%"}} justify="center" spacing={2}>
                 <Grow in={true} timeout={700} >
-                    <Grid item xs={10} >
+                    <Grid item xs={6} >
                         <Button
                             type="submit"
                             fullWidth
@@ -162,10 +203,10 @@ class MessagePage extends Component {
                 </Grow>
             </Grid>
 
-            
+            <div ref={this.el} > </div>
+
             </form>
             }
-
         </div>
         )
     }
