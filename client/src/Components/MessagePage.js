@@ -4,12 +4,10 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import Container from '@material-ui/core/Container';
 
 import Grow from '@material-ui/core/Grow';
 import Paper from '@material-ui/core/Paper';
 import List from '@material-ui/core/List';
-import ListItemText from '@material-ui/core/ListItemText';
 
 import openSocket from 'socket.io-client';
 const socket = openSocket('http://localhost:5000');
@@ -19,12 +17,13 @@ const socket = openSocket('http://localhost:5000');
 
 
 
-class MessagePage extends Component {
+class MessagePage extends Component{
     constructor(props) {
         super(props);
         this.el = React.createRef();
         this.newData = React.createRef();
 
+        socket.emit('room', this.props.roomVal)
     }
 
     state = {
@@ -45,6 +44,7 @@ class MessagePage extends Component {
                 this.updateArray(data);    
             } 
         });
+
     }
 
     
@@ -84,11 +84,10 @@ class MessagePage extends Component {
         console.log(this.state.value);
 
         //sends this to server
-        socket.emit('registerUser', this.state.value)
+        socket.emit('registerUser', this.state.value,this.props.roomVal)
 
         //clears message
         this.setState({ value : ""});
-        
     }
 
     //this is for messages
@@ -196,7 +195,7 @@ class MessagePage extends Component {
                 </Grow>
             </Grid>
 
-            <Grid container style={{paddingBottom:"10%"}} justify="center" spacing={2}>
+            <Grid container style={{paddingBottom:"2%"}} justify="center" spacing={2}>
                 <Grow in={true} timeout={700} >
                     <Grid item xs={6} >
                         <Button

@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-import MessagePage from './Components/MessagePage'
+import RootPage from './Components/RootPage'
 
 class App extends Component {
   state = {
@@ -35,23 +35,31 @@ class App extends Component {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <div>
 
-        <div>{this.state.response} users</div>
+          <h1 style={{marginTop:"-20%"}}>
+            Messaging App
+          </h1>
+
+          <h6 style={{marginTop:"-5%"}}>   
+            React, Express, Socket-io
+          </h6>
+
+          <img src={logo} className="App-logo" alt="logo" />
+
+          <h5 style={{textAlign:"left"}}>
+            1. Enter a unique room ID (letters or numbers)
+            <br/>
+            2. Select your username
+            <br/>
+            3. Chat away with people in same room ID!
+          </h5>
+        </div>
+
+        <h3 style={{marginBottom:"-5%"}}>{this.state.response} users</h3>
       </header>
 
-      <MessagePage></MessagePage>
+      <RootPage></RootPage>
     </div>
   );
   }
