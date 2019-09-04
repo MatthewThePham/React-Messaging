@@ -15,19 +15,19 @@ const socket = openSocket('http://localhost:5000');
 //added keys for list, react needs key to keep track of array items relative to dom
 //https://stackoverflow.com/questions/39549424/how-to-create-unique-keys-for-react-elements/51428373
 
-
-
 class MessagePage extends Component{
     constructor(props) {
         super(props);
         this.el = React.createRef();
         this.newData = React.createRef();
 
+        //send specific room # to server
         socket.emit('room', this.props.roomVal)
     }
 
     state = {
-        value: '',       //used for mess
+        value: '',          //used for messages to and from users
+        response: '',       //show total users in a room
         submission: false,
         children: [],
         childIndex:0,
@@ -36,7 +36,7 @@ class MessagePage extends Component{
     }
 
     componentDidMount(){
-        //big meme have to bind into arrow function for inner function to work
+        //have to bind into arrow function for inner function to work
         // ie using keyword "this" on a function
 
         socket.on('news', data => {
@@ -45,34 +45,51 @@ class MessagePage extends Component{
             } 
         });
 
+        //get total # of users in current room
+        this.callApi()
+            .then(res => this.setState({ response: res.express }))
+            .catch(err => console.log(err));
     }
 
     
     componentDidUpdate(){
         //moves to the bottom of the form after pressing submit
-        //doesnt auto do in componentDidmount as no new dom elemnent was mounted
+        //is not automatically done in componentDidmount as no new dom elemnent was mounted
         if(this.el.current != null && this.state.submission === true && this.state.doneTransition == false){
             this.el.current.scrollIntoView({ block:"center"});
             this.setState({
                 doneTransition: true
             });
         }
+
+        //updates total # of users in current room if # changes
+        this.callApi()
+            .then(res => this.setState({ response: res.express }))
+            .catch(err => console.log(err));
     }
     
 
+    //added URL paramters in req body to get specific room
+    callApi = async () => {
+        const response = await fetch(`/getUsersInRoom/${this.props.roomVal}`);
+        const body = await response.json();
+    
+        //if (response.status !== 200) throw Error(response.message);
+        return body;
+    };
+
+    
+    //add messages (from other users and from self) into an array block
     updateArray = (data) => {
         this.setState({
             children: [...this.state.children, data] 
         });
 
-
         var out = this.newData.current;
         if(out != null){
             out.scrollTop = out.scrollHeight - out.clientHeight
             out.scrollIntoView({ behavior: "smooth",block:"nearest",inline: 'start' })
-        }
-
-        
+        }  
     }
     
 
@@ -81,25 +98,21 @@ class MessagePage extends Component{
         e.preventDefault();
         this.setState({ submission : true});
 
-        console.log(this.state.value);
-
-        //sends this to server
+        //sends this data to server
         socket.emit('registerUser', this.state.value,this.props.roomVal)
 
         //clears message
         this.setState({ value : ""});
     }
 
-    //this is for messages
+    //this is for messages submissions
     handleSubmitMessage = (e) => {
         e.preventDefault();
-
-        console.log(this.state.value);
     
         var tempMessage = "You: " + this.state.value;
         this.updateArray(tempMessage)
 
-        //sends this to server
+        //sends this data to server
         socket.emit('sendMessage', this.state.value)
 
         //clears message
@@ -112,7 +125,6 @@ class MessagePage extends Component{
     }
 
     //this is for textbox for both pages
-    
     handleChange = event => {
         this.setState({ value : event.target.value});
     };
@@ -169,11 +181,11 @@ class MessagePage extends Component{
                                     {home}
                                 </Typography>
 
-                                )}
-                                
+                                )}                           
                             </React.Fragment>
                         </List>
                     </Paper>
+                    
                 </Grow>
             </Grid>
 
@@ -209,6 +221,8 @@ class MessagePage extends Component{
                     </Grid>
                 </Grow>
             </Grid>
+
+            <div>{this.state.response}</div>
 
             <div ref={this.el} > </div>
 

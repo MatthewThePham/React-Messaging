@@ -4,27 +4,37 @@ import './App.css';
 
 import RootPage from './Components/RootPage'
 
+/**
+ 
+<h5 style={{textAlign:"left"}}>
+  1. Enter a unique room ID (can be combination of letters or numbers)
+  2. Select your Username
+  3. Chat away with people in same room ID!
+</h5>
+
+ **/
+
 class App extends Component {
   state = {
     response: '',
   };
 
   componentDidMount(){
-    //test to see if server connects
+    //test to see if server connects and shows total users
     this.callApi()
       .then(res => this.setState({ response: res.express }))
       .catch(err => console.log(err));
   }
 
   componentDidUpdate(){
-    //test to see if server connects
+    //updates the total users
     this.callApi()
       .then(res => this.setState({ response: res.express }))
       .catch(err => console.log(err));
   }
 
   callApi = async () => {
-    const response = await fetch(`/get`);
+    const response = await fetch(`/getTotalUsers`);
     const body = await response.json();
 
     //if (response.status !== 200) throw Error(response.message);
@@ -35,9 +45,9 @@ class App extends Component {
   return (
     <div className="App">
       <header className="App-header">
-        <div>
+        <div >
 
-          <h1 style={{marginTop:"-20%"}}>
+          <h1>
             Messaging App
           </h1>
 
@@ -46,17 +56,9 @@ class App extends Component {
           </h6>
 
           <img src={logo} className="App-logo" alt="logo" />
-
-          <h5 style={{textAlign:"left"}}>
-            1. Enter a unique room ID (letters or numbers)
-            <br/>
-            2. Select your username
-            <br/>
-            3. Chat away with people in same room ID!
-          </h5>
         </div>
 
-        <h3 style={{marginBottom:"-5%"}}>{this.state.response} users</h3>
+        <h3 >{this.state.response} users</h3>
       </header>
 
       <RootPage></RootPage>

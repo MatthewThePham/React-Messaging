@@ -2,15 +2,8 @@ import React, {Component} from 'react';
 import MessagePage from './MessagePage'
 
 import Grid from '@material-ui/core/Grid';
-//import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-
-//use this page to either pick
-//Join room
-//Create room
-import openSocket from 'socket.io-client';
-const socket = openSocket('http://localhost:5000');
 
 
 class RootPage extends Component {
@@ -25,15 +18,11 @@ class RootPage extends Component {
         this.setState({
             submission: true
         });
-
-       // socket.emit('room', this.state.room)
     }
-
 
     handleChange = event => {
         this.setState({ room : event.target.value});
     };
-
 
     render(){
         return (
@@ -51,7 +40,7 @@ class RootPage extends Component {
                             multiline
                             required fullWidth
                             name="multiline"
-                            label="Please enter a room number"
+                            label="Please enter a room value"
                             id="Multiline"
                             onChange={this.handleChange}
                             />
