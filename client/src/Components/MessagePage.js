@@ -137,7 +137,7 @@ class MessagePage extends Component{
             ?
             <form noValidate onSubmit={this.handleSubmit}>
 
-            <Grid container style={{paddingTop:"5%"}} justify="center" spacing={2}>
+            <Grid container style={{paddingTop:"5%"}} justify="center">
                 <Grid item xs={6} >
                     <TextField
                     variant="outlined"
@@ -151,7 +151,7 @@ class MessagePage extends Component{
                 </Grid>
             </Grid>
 
-            <Grid container style={{paddingBottom:"5%"}} justify="center" spacing={2}>
+            <Grid container style={{paddingBottom:"5%"}} justify="center">
                 <Grid item xs={6} >
                     <Button
                         type="submit"
@@ -169,10 +169,10 @@ class MessagePage extends Component{
             <form noValidate onSubmit={this.handleSubmitMessage}>
 
 
-            <Grid container style={{paddingTop:"2%"}} justify="center" spacing={2}>
+            <Grid container style={{paddingTop:"2%"}} justify="center">
                 <Grow in={true} timeout={1000} >
                     
-                    <Paper elevation={3} ref={this.newData}  justify="center"  style={{ justify:"center", height: '20px', width:"50%", overflow: 'auto', paddingTop:"15%", paddingBottom:"3%"}}>
+                    <Paper elevation={3} ref={this.newData}  justify="center"  style={{ justify:"center", height: '20vh', width:"50%", overflow: 'auto', paddingTop:"15%", paddingBottom:"3%"}}>
                         <List>
                             <React.Fragment>
                                 {this.state.children.map( (home,index) => 
@@ -189,7 +189,7 @@ class MessagePage extends Component{
                 </Grow>
             </Grid>
 
-            <Grid container style={{paddingTop:"2%"}} justify="center" spacing={2}>
+            <Grid container style={{paddingTop:"2%"}} justify="center">
                 <Grow in={true} timeout={1000} >
                     <Grid item xs={6} >
                         <TextField
@@ -207,7 +207,7 @@ class MessagePage extends Component{
                 </Grow>
             </Grid>
 
-            <Grid container style={{paddingBottom:"2%"}} justify="center" spacing={2}>
+            <Grid container style={{paddingBottom:"2%"}} justify="center">
                 <Grow in={true} timeout={700} >
                     <Grid item xs={6} >
                         <Button

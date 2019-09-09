@@ -6,7 +6,8 @@ import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
+
+import howToGif from './howToSocket.gif';
 
 import RootPage from './Components/RootPage'
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
@@ -36,9 +37,9 @@ function Index() {
 function About() {
   return (
     <header className="App-header"> 
-    <div className="App" style={{marginTop:"-10%"}}>
-        <h2>FAQ:</h2>
-        <h5 style={{textAlign:"left"}}>
+    <div className="App" style={{marginTop:"-2%"}}>
+        <h2 style={{textAlign:"center"}}>FAQ:</h2>
+        <h6 style={{textAlign:"left", paddingLeft:"3%", paddingRight:"3%"}}>
           1. Enter a unique room ID (can be combination of letters or numbers)
           <br></br>
           <br></br>
@@ -46,19 +47,17 @@ function About() {
           <br></br>
           <br></br>
           3. Chat away with people in same room ID!
-        </h5>
+        </h6>
+        <img src={howToGif} alt="howTo" />
+
     </div>
-        </header>
-
-
+    </header>
   )
 }
 
 function Users() {
   return <h2>Users</h2>;
 }
-
-
 
 class App extends Component {
   state = {
@@ -101,7 +100,7 @@ render(){
           <IconButton edge="start" color="inherit" aria-label="menu">
             <MenuIcon />
           </IconButton>
-          <div style={{paddingLeft:"60%"}}></div>
+          <div style={{paddingLeft:"70%"}}></div>
 
           <Button color="inherit" style={{flex:1}}
             component={Link} to="/"
@@ -123,7 +122,7 @@ render(){
     </Router>
 
   
-      <h2 style={{marginTop:"-5%", paddingBottom:"4%"}}>{this.state.response} users</h2>
+      <h2 style={{marginTop:"-2%", paddingBottom:"4%"}}>{this.state.response} users</h2>
     </div>
 
       <RootPage></RootPage>

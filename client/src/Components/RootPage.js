@@ -33,7 +33,7 @@ class RootPage extends Component {
                 <div>
                     <form noValidate onSubmit={this.handleSubmit}>
 
-                    <Grid container style={{paddingTop:"5%"}} justify="center" spacing={2}>
+                    <Grid container style={{paddingTop:"5%"}} justify="center">
                         <Grid item xs={6} >
                             <TextField
                             variant="outlined"
@@ -47,7 +47,7 @@ class RootPage extends Component {
                         </Grid>
                     </Grid>
 
-                    <Grid container style={{paddingBottom:"5%"}} justify="center" spacing={2}>
+                    <Grid container style={{paddingBottom:"5%"}} justify="center">
                         <Grid item xs={6} >
                             <Button
                                 type="submit"
