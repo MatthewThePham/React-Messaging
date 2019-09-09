@@ -16,7 +16,7 @@ var roomMap = new Map();
 //Used to send total number of users from api to react get request
 app.get('/getTotalUsers', (req, res, next) => {
 
-    var tempMessage = 'Number of users : ' + connectCounter;
+    var tempMessage = 'Total Number of Users : ' + connectCounter;
     res.send({ express: tempMessage });
 
     //console.log('Connected to react')
