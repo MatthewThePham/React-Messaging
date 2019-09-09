@@ -1,10 +1,9 @@
-----
+
 ## React Messaging App
 
 ![GIFofWebsiteUse](https://gitlab.com/MatthewPh/react-socketio/raw/master/client/src/howToSocket.gif)
 
 
-----
 ### General questions
 
 * What technologies were used?
