@@ -4,6 +4,8 @@
     "socket.io": "^2.2.0"
   },
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "client": "npm start --prefix client",
+    "heroku-postbuild": "npm add --prefix client && npm run build --prefix client"
   }
 }
