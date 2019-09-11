@@ -2,10 +2,17 @@ const express = require('express');
 const app = express();
 
 var server = require('http').Server(app);
+
+const port = process.env.PORT || 5000;
+server.listen(port, function() {
+    console.log(`Listening on ${port}`)
+});
+
 var io = require('socket.io')(server);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
 
 //total # of users
 var connectCounter = 0;
@@ -106,9 +113,3 @@ if(process.env.NODE_ENV === "production"){
       res.sendFile(path.resolve(__dirname, "client", "build", "index.html"))
   })
 }
-
-const port = process.env.PORT || 5000;
-
-server.listen(port, function() {
-    console.log(`Listening on ${port}`)
-});
