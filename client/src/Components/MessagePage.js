@@ -10,7 +10,7 @@ import Paper from '@material-ui/core/Paper';
 import List from '@material-ui/core/List';
 
 import openSocket from 'socket.io-client';
-const socket = openSocket('http://localhost:5000');
+const socket = openSocket("/");    //openSocket('http://localhost:5000');
 
 //added keys for list, react needs key to keep track of array items relative to dom
 //https://stackoverflow.com/questions/39549424/how-to-create-unique-keys-for-react-elements/51428373
