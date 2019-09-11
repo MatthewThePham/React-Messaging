@@ -4,8 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "engines": { 
-    "node": "8.11.3" ,
-    "yarn": "1.17.3"
+    "node": "8.11.3"
   },
   "dependencies": {
     "express": "^4.17.1",
@@ -13,7 +12,7 @@
   },
   "scripts": {
     "start": "node index.js",
-    "client": "yarn start --prefix client",
-    "heroku-postbuild": "yarn add --prefix client && yarn run build --prefix client"
+    "client": "npm start --prefix client",
+    "heroku-postbuild": "npm install --prefix client && npm run build --prefix client"
   }
 }
