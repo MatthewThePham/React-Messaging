@@ -11,7 +11,7 @@
 > This website uses React for the frontend client. React router rom is used to switch pages. Material UI is used for general GUI objects. 
 
 > Express and Socket IO are used for the backend server.  Socket IO allows for easy real time data transfer between clients. 
-> The backend and frontend were written in Javascript.
+> The backend and frontend were written in Javascript. Website Link: https://people-chat.herokuapp.com/
 
 * **Features?**
 
