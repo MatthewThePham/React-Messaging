@@ -98,10 +98,10 @@ render(){
         <Toolbar>
 
           <IconButton edge="start" color="inherit" aria-label="menu">
-            <MenuIcon />
+            <MenuIcon /> 
           </IconButton>
-          <div style={{paddingLeft:"70%"}}></div>
 
+          <div style={{paddingLeft:"50%"}}></div>
           <Button color="inherit" style={{flex:1}}
             component={Link} to="/"
            >Home    
