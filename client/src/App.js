@@ -48,7 +48,7 @@ function About() {
           <br></br>
           3. Chat away with people in same room ID!
         </h6>
-        <img src={howToGif} alt="howTo" />
+        <img src={howToGif} alt="howTo" style={{width:"90%"}}/>
 
     </div>
     </header>
