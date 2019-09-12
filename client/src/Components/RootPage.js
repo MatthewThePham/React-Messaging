@@ -40,7 +40,7 @@ class RootPage extends Component {
                             multiline
                             required fullWidth
                             name="multiline"
-                            label="Please enter a room value"
+                            label="Enter a room ID"
                             id="Multiline"
                             onChange={this.handleChange}
                             />

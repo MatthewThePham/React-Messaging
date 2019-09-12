@@ -90,8 +90,7 @@ class App extends Component {
 render(){
   return (
     <div className="App">
-      <div style={{backgroundColor: '#282c34', color:'white'}}>
-
+      <div style={{backgroundColor: '#282c34', color:'white'}}> 
       <Router>
 
       <AppBar position="static" >
@@ -101,7 +100,7 @@ render(){
             <MenuIcon /> 
           </IconButton>
 
-          <div style={{paddingLeft:"50%"}}></div>
+          <div style={{paddingLeft:"55%"}}></div>
           <Button color="inherit" style={{flex:1}}
             component={Link} to="/"
            >Home    

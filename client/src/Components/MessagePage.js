@@ -88,7 +88,6 @@ class MessagePage extends Component{
         var out = this.newData.current;
         if(out != null){
             out.scrollTop = out.scrollHeight - out.clientHeight
-            out.scrollIntoView({ behavior: "smooth",block:"nearest",inline: 'start' })
         }  
     }
     
@@ -105,22 +104,26 @@ class MessagePage extends Component{
         this.setState({ value : ""});
     }
 
+    handleKeyPress = (e) => {
+        if( e.key == 'Enter'){
+            this.handleSubmitMessage(e)
+        }
+    }
+
     //this is for messages submissions
     handleSubmitMessage = (e) => {
         e.preventDefault();
     
-        var tempMessage = "You: " + this.state.value;
-        this.updateArray(tempMessage)
-
-        //sends this data to server
-        socket.emit('sendMessage', this.state.value)
-
-        //clears message
-        this.setState({ value : ""});
-
-        //moves to the bottom of the form
-        if(this.el.current != null){
-            this.el.current.scrollIntoView({ block:"nearest", inline: 'start'});
+        if(this.state.value != ""){
+            var tempMessage = "You: " + this.state.value;
+            this.updateArray(tempMessage)
+    
+            //sends this data to server
+            socket.emit('sendMessage', this.state.value)
+    
+            //clears message
+            this.setState({ value : ""});
+    
         }
     }
 
@@ -172,12 +175,12 @@ class MessagePage extends Component{
             <Grid container style={{paddingTop:"2%"}} justify="center">
                 <Grow in={true} timeout={1000} >
                     
-                    <Paper elevation={3} ref={this.newData}  justify="center"  style={{ justify:"center", height: '20vh', width:"50%", overflow: 'auto', paddingTop:"15%", paddingBottom:"3%"}}>
+                    <Paper elevation={3} ref={this.newData}  justify="center"  style={{ justify:"center", height: '30vh', width:"55%", overflow: 'auto', paddingTop:"15%", paddingBottom:"5%"}}>
                         <List>
                             <React.Fragment>
                                 {this.state.children.map( (home,index) => 
                                 
-                                <Typography variant="subtitle1" key={index} style={{paddingTop:"1%"}}>
+                                <Typography variant="subtitle1" key={index} style={{paddingBottom:"1%"}}>
                                     {home}
                                 </Typography>
 
@@ -194,6 +197,7 @@ class MessagePage extends Component{
                     <Grid item xs={6} >
                         <TextField
                         variant="outlined"
+                        onKeyPress={this.handleKeyPress}
                         multiline
                         rows="2"
                         required fullWidth
