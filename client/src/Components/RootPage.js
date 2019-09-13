@@ -9,17 +9,48 @@ import TextField from '@material-ui/core/TextField';
 class RootPage extends Component {
     state = {
         submission: false,
-        room: "",
+        room: '',
+
+        roomError:false,
+        roomErrorMessage:'',
     }
     
-    //this is for the username
+
+    //this is for the room ID
     handleSubmit = (e) => {
         e.preventDefault();
-        this.setState({
-            submission: true
+
+        var error = {
+            nameError:false,
+            nameErrorMessage:'',
+        }
+
+        //white space check
+        if( !this.state.room.length){
+            error.nameError = true;
+            error.nameErrorMessage = "Please enter an ID"
+        }
+
+        this.setState({ 
+            roomError : error.nameError,
+            roomErrorMessage : error.nameErrorMessage
         });
+
+        if(!error.nameError){
+            this.setState({
+                submission: true
+            });
+        }
     }
 
+    //this is for checking if user press Enter on Room ID page
+    handleKeyPress = (e) => {
+        if( e.key == 'Enter'){
+            this.handleSubmit(e)
+        }
+    }
+
+    //automatically updates user input 
     handleChange = event => {
         this.setState({ room : event.target.value});
     };
@@ -37,11 +68,12 @@ class RootPage extends Component {
                         <Grid item xs={6} >
                             <TextField
                             variant="outlined"
-                            multiline
                             required fullWidth
-                            name="multiline"
+                            name="roomId"
                             label="Enter a room ID"
-                            id="Multiline"
+                            onKeyPress={this.handleKeyPress}
+                            error={this.state.roomError}
+                            helperText={this.state.roomErrorMessage}
                             onChange={this.handleChange}
                             />
                         </Grid>

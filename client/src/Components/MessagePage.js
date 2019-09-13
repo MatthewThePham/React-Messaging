@@ -29,6 +29,8 @@ class MessagePage extends Component{
         value: '',          //used for messages to and from users
         response: '',       //show total users in a room
         submission: false,
+        userNameError:false,
+        userNameErrorMessage:'',
         children: [],
         childIndex:0,
 
@@ -55,7 +57,7 @@ class MessagePage extends Component{
     componentDidUpdate(){
         //moves to the bottom of the form after pressing submit
         //is not automatically done in componentDidmount as no new dom elemnent was mounted
-        if(this.el.current != null && this.state.submission === true && this.state.doneTransition == false){
+        if(this.el.current !== null && this.state.submission === true && this.state.doneTransition == false){
             this.el.current.scrollIntoView({ block:"center"});
             this.setState({
                 doneTransition: true
@@ -86,7 +88,7 @@ class MessagePage extends Component{
         });
 
         var out = this.newData.current;
-        if(out != null){
+        if(out !== null){
             out.scrollTop = out.scrollHeight - out.clientHeight
         }  
     }
@@ -95,16 +97,44 @@ class MessagePage extends Component{
     //this is for the username
     handleSubmit = (e) => {
         e.preventDefault();
-        this.setState({ submission : true});
 
-        //sends this data to server
-        socket.emit('registerUser', this.state.value,this.props.roomVal)
+        var error = {
+            nameError:false,
+            nameErrorMessage:'',
+        }
 
-        //clears message
-        this.setState({ value : ""});
+        //white space check
+        if( !this.state.value.length){
+            error.nameError = true;
+            error.nameErrorMessage = "Please enter a Username"
+        }
+
+        this.setState({ 
+            userNameError : error.nameError,
+            userNameErrorMessage : error.nameErrorMessage
+        });
+
+
+        if(!error.nameError){
+            this.setState({ submission : true});
+
+            //sends this data to server
+            socket.emit('registerUser', this.state.value,this.props.roomVal)
+    
+            //clears message
+            this.setState({ value : ""});
+        }    
     }
 
+    //this is for checking if user press Enter on username screen
     handleKeyPress = (e) => {
+        if( e.key == 'Enter'){
+            this.handleSubmit(e)
+        }
+    }
+
+    //this is for checking if user press Enter on message page
+    handleKeyPressMessage = (e) => {
         if( e.key == 'Enter'){
             this.handleSubmitMessage(e)
         }
@@ -127,7 +157,7 @@ class MessagePage extends Component{
         }
     }
 
-    //this is for textbox for both pages
+    //automically changes user input for both pages
     handleChange = event => {
         this.setState({ value : event.target.value});
     };
@@ -144,11 +174,13 @@ class MessagePage extends Component{
                 <Grid item xs={6} >
                     <TextField
                     variant="outlined"
-                    multiline
                     required fullWidth
-                    name="multiline"
+                    name="userName"
                     label="User name"
                     id="Multiline"
+                    onKeyPress={this.handleKeyPress}
+                    error={this.state.userNameError}
+                    helperText={this.state.userNameErrorMessage}
                     onChange={this.handleChange}
                     />
                 </Grid>
@@ -197,13 +229,13 @@ class MessagePage extends Component{
                     <Grid item xs={6} >
                         <TextField
                         variant="outlined"
-                        onKeyPress={this.handleKeyPress}
                         multiline
                         rows="2"
                         required fullWidth
-                        name="multiline"
+                        name="messageLines"
                         label="Message"
                         id="Multiline"
+                        onKeyPress={this.handleKeyPressMessage}
                         value={this.state.value}
                         onChange={this.handleChange}
                         />

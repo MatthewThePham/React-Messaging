@@ -61,7 +61,7 @@ function Users() {
 
 class App extends Component {
   state = {
-    response: '',
+    response: ''
   };
 
   componentDidMount(){
