@@ -100,7 +100,7 @@ render(){
             <MenuIcon /> 
           </IconButton>
 
-          <div style={{paddingLeft:"55%"}}></div>
+          <div style={{paddingLeft:"50%"}}></div>
           <Button color="inherit" style={{flex:1}}
             component={Link} to="/"
            >Home    
